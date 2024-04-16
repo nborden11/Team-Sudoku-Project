@@ -6,10 +6,11 @@ class Cell:
         self.screen = screen
 
     def set_cell_value(self, value):
-        pass
+        value = self.value
 
     def set_sketched_value(self, value):
-        pass
+        value = self.value
 
     def draw(self):
+        #DO THIS PART
         pass
