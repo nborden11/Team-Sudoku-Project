@@ -1,5 +1,6 @@
 import math,random
 import pygame, sys
+from costants import *
 
 """
 This was adapted from a GeeksforGeeks article "Program for Sudoku Generator" by Aarti_Rathi and Ankur Trisal
@@ -37,9 +38,8 @@ class SudokuGenerator:
 	Return: list[list]
     '''
     def get_board(self):
-
+        self.board = [["-" for i in range(9)] for j in range(9)]
         return self.board
-        pass
 
     '''
 	Displays the board to the console
@@ -49,6 +49,10 @@ class SudokuGenerator:
 	Return: None
     '''
     def print_board(self):
+        for row in self.board:  # row: ["-", "-", "-"]
+            for col in row:
+                print(col, end=" ")
+            print()
         pass
 
     '''
@@ -193,6 +197,10 @@ class SudokuGenerator:
     '''
     def remove_cells(self):
         pass
+
+pygame.init()
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Sudoku")
 
 '''
 DO NOT CHANGE
