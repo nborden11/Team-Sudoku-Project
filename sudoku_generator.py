@@ -1,6 +1,7 @@
 import math,random
 import pygame, sys
 from costants import *
+from board import *
 
 """
 This was adapted from a GeeksforGeeks article "Program for Sudoku Generator" by Aarti_Rathi and Ankur Trisal
@@ -211,6 +212,7 @@ class SudokuGenerator:
 	Return: None
     '''
     def remove_cells(self):
+        for i in range(self.di)
         pass
 
 
