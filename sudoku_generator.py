@@ -124,6 +124,21 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_diagonal(self):
+        dia = [[[], [], []], [[], [], []], [[], [], []]]
+        for j in range(len(dia)):
+            temp = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+            c = 0
+            for k in range(1, 10):
+                for i in temp:
+                    num = int(random.randint(1, 10))
+                    if i == num:
+                        dia[j][c].append(num)
+                        temp.remove(num)
+                        break
+                if k == 3 or k == 6:
+                    c += 1
+        print(dia)
+
         pass
 
     '''
