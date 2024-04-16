@@ -217,7 +217,24 @@ class SudokuGenerator:
 	Return: None
     '''
     def remove_cells(self):
-        for i in range(self.di)
+        temp = []
+        for i in range(self.board.difficulty):
+            a, b
+            flag = 0
+            while True:
+                a, b = random.randint(1,10)
+                if temp == []:
+                    break
+                else:
+                    for i in range(len(temp)):
+                        if temp[i][0] == a and temp[i][1] == b:
+                            flag = 1
+                            break
+                    if flag == 0:
+                        break
+                    self.board[a][b] = 0
+                    temp.append([a,b])
+
         pass
 
 
