@@ -66,6 +66,7 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_row(self, row, num):
+
         pass
 
     '''
@@ -213,9 +214,6 @@ class SudokuGenerator:
     def remove_cells(self):
         pass
 
-pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Sudoku")
 
 '''
 DO NOT CHANGE
