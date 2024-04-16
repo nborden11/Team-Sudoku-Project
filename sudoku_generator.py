@@ -234,6 +234,7 @@ class SudokuGenerator:
                         break
                     self.board[a][b] = 0
                     temp.append([a,b])
+                    #change
 
         pass
 
