@@ -30,7 +30,7 @@ class SudokuGenerator:
         self.removed_cells = removed_cells
         self.board = []
         self.box_length = math.sqrt(row_length)
-        pass
+        return None
 
     '''
 	Returns a 2D python list of numbers which represents the board
@@ -67,8 +67,10 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_row(self, row, num):
-
-        pass
+        for i in self.board[row][0]:
+            if self.board[row][i] == num:
+                return False
+        return True
 
     '''
 	Determines if num is contained in the specified column (vertical) of the board
@@ -81,7 +83,10 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_col(self, col, num):
-        pass
+        for i in self.board[0][col]:
+            if self.board[i][col] == num:
+                return False
+        return True
 
     '''
 	Determines if num is contained in the 3x3 box specified on the board
@@ -240,7 +245,7 @@ def generate_sudoku(size, removed):
     return board
 
 
-pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Sudoku")
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Sudoku")
 
