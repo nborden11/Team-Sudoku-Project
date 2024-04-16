@@ -4,3 +4,13 @@ class Cell:
         self.row = row
         self.column = col
         self.screen = screen
+
+    def set_cell_value(self, value):
+        value = self.value
+
+    def set_sketched_value(self, value):
+        value = self.value
+
+    def draw(self):
+        #DO THIS PART
+        pass
