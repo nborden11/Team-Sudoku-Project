@@ -1,4 +1,5 @@
 import math,random
+import pygame, sys
 
 """
 This was adapted from a GeeksforGeeks article "Program for Sudoku Generator" by Aarti_Rathi and Ankur Trisal
@@ -36,6 +37,7 @@ class SudokuGenerator:
 	Return: list[list]
     '''
     def get_board(self):
+
         return self.board
         pass
 
