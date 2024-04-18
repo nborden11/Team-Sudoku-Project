@@ -36,3 +36,5 @@ class Cell:
 
         if self.selected:
             pygame.draw.rect(self.screen, pygame.Color('red'), (x, y, self.cell_size, self.cell_size), 3)
+
+#
