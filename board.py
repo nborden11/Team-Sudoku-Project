@@ -1,4 +1,4 @@
-from costants import *
+from constants import *
 import pygame
 from sudoku_generator import *
 
