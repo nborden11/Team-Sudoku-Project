@@ -2,14 +2,14 @@ import math,random
 import pygame, sys
 from costants import *
 from board import *
+from cell import *
 
 class SudokuGenerator:
     def __init__(self, row_length, removed_cells):
         self.row_length = row_length
         self.removed_cells = removed_cells
-        self.board = []
-        self.box_length = math.sqrt(row_length)
-        return None
+        self.board = [[0] * self.row_length for _ in range(self.row_length)]
+        self.box_length = int(math.sqrt(row_length))
 
     def get_board(self):
         return self.board
@@ -100,7 +100,7 @@ class SudokuGenerator:
                 if self.board[v1][v2] != 0:
                     break
             self.board[v1][v2] = 0
-        pass
+
 
     def generate_sudoku(size, removed):
         generator = SudokuGenerator(size, removed)
@@ -109,7 +109,4 @@ class SudokuGenerator:
         return generator.get_board()
 
 
-        #pygame.init()
-        #screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        #pygame.display.set_caption("Sudoku")
 

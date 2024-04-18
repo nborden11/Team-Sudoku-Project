@@ -1,5 +1,6 @@
-from constants import *
+from costants import *
 import pygame
+from board import *
 from sudoku_generator import *
 
 class Cell:
