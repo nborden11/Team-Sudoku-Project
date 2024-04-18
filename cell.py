@@ -1,4 +1,4 @@
-from costants import *
+from constants import *
 import pygame
 from sudoku_generator import *
 
@@ -17,10 +17,10 @@ class Cell:
         self.value = value
 
     def set_cell_value(self, value):
-        value = self.value
+        self.value = value
 
     def set_sketched_value(self, value):
-        value = self.value
+        self.sketched_value = value
 
     def draw(self):
         x = self.col * self.cell_size
