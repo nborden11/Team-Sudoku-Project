@@ -10,6 +10,7 @@ class Board:
         self.difficulty = difficulty
         self.board = sudoku_generator(9, 0)
 
+
     def draw(self):
         self.screen.fill(BG_COLOR)
         for i in range(1, BOARD_ROWS):
@@ -56,20 +57,29 @@ class Board:
         pass
 
     def clear(self):
-        pass
+        if self.selected_cell and self.selected_cell.value == 0:
+            self.selected_cell.set_cell_value(0)
+            self.selected_cell.set_sketched_value(0)
 
     def sketch(self, value):
-        pass
+        if self.selected_cell and self.selected_cell.value == 0:
+            self.selected_cell.set_sketched_value(value)
 
     def place_number(self, value):
-        pass
+        if self.selected_cell and self.selected_cell.value == 0:
+            self.selected_cell.set_cell_value(value)
 
     def reset_to_original(self):
-        self.board = initialize_board()  # Assuming you have a function to initialize the Sudoku board
-        self.update_board()
+        for row in self.cells:
+            for cell in row:
+                cell.set_cell_value(0)
 
     def is_full(self):
-        pass
+        for row in self.cells:
+            for cell in row:
+                if cell.value == 0:
+                    return False
+        return True
 
     def update_board(self):
         for row in range(9):
