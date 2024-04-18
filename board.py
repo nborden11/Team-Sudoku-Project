@@ -93,6 +93,12 @@ class Board:
                     self.screen.blit(text, text_rect)
         pygame.display.update()
 
+    def find_empty(self):
+        for i in range(len(self.board)):
+            for j in range(i):
+                if j == "-":
+                    return (i, j)
+
     def check_board(self):
         pass
 
