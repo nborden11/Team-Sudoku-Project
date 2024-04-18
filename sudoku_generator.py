@@ -1,6 +1,6 @@
 import math,random
 import pygame, sys
-from costants import *
+from constants import *
 from board import *
 
 """
