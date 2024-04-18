@@ -1,6 +1,3 @@
-from constants import *
-import pygame
-from sudoku_generator import *
 
 class Cell:
     def __init__(self, value, row, col, screen):
