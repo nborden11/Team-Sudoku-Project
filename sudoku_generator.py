@@ -39,7 +39,6 @@ class SudokuGenerator:
 	Return: list[list]
     '''
     def get_board(self):
-        self.board = [["-" for i in range(9)] for j in range(9)]
         return self.board
 
     '''
@@ -50,11 +49,12 @@ class SudokuGenerator:
 	Return: None
     '''
     def print_board(self):
-        for row in self.board:  # row: ["-", "-", "-"]
+        for row in self.board:
             for col in row:
-                print(col, end=" ")
+                print(col if col!= 0 else '.', end = '')
             print()
-        pass
+        print()
+
 
     '''
 	Determines if num is contained in the specified row (horizontal) of the board
@@ -67,8 +67,8 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_row(self, row, num):
-        for i in self.board[row][0]:
-            if self.board[row][i] == num:
+        for i in self.board[row]:
+            if i == num:
                 return False
         return True
 
@@ -83,7 +83,7 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_col(self, col, num):
-        for i in self.board[0][col]:
+        for i in range(self.row_length):
             if self.board[i][col] == num:
                 return False
         return True
@@ -134,14 +134,12 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_box(self, row_start, col_start):
-        box = [[], [], [], [], [], [], [], [], []]
-        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        box = list(range(1, self.row_length + 1))
+        random.shuffle(box)
         for i in range(row_start, row_start+3):
             for j in range(col_start, col_start+3):
-                random.shuffle(numbers)
-                box[j] = numbers[:]
+                self.board[row_start + i][col_start + j] = box.pop()
 
-        pass
     
     '''
     Fills the three boxes along the main diagonal of the board
@@ -152,15 +150,8 @@ class SudokuGenerator:
     '''
 
     def fill_diagonal(self):
-        dia = [[], [], []]
-        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-        for j in range(3):
-            random.shuffle(numbers)
-            dia[j] = numbers[:]
-
-        for i in dia:
-            print(i)
+        for i in range(0, self.row_length, 3):
+            self.fill_box(i, i)
 
     '''
     DO NOT CHANGE
@@ -211,7 +202,7 @@ class SudokuGenerator:
     '''
     def fill_values(self):
         self.fill_diagonal()
-        self.fill_remaining(0, self.box_length)
+        self.fill_remaining(0, 0)
 
     '''
     Removes the appropriate number of cells from the board
@@ -236,7 +227,6 @@ class SudokuGenerator:
                     break
             self.board[v1][v2] = 0
                     #change
-
         pass
 
 
@@ -256,12 +246,10 @@ removed is the number of cells to clear (set to 0)
 Return: list[list] (a 2D Python list to represent the board)
 '''
 def generate_sudoku(size, removed):
-    sudoku = SudokuGenerator(size, removed)
-    sudoku.fill_values()
-    board = sudoku.get_board()
-    sudoku.remove_cells()
-    board = sudoku.get_board()
-    return board
+    generator = SudokuGenerator(size, removed)
+    generator.fill_values()
+    generator.remove_cells()
+    return generator.get_board()
 
 
     pygame.init()
