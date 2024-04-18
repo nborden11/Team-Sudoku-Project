@@ -1,4 +1,5 @@
-from cell import *
+from costants import *
+import pygame
 from sudoku_generator import *
 
 class Board:
@@ -7,32 +8,53 @@ class Board:
         self.height = height
         self.screen = screen
         self.difficulty = difficulty
-        self.cells = [[Cell(0, i, j, screen) for j in range(9)] for i in range(9)]
-        self.selected_cell = None
+        self.board = generate_sudoku(9, 0)
 
 
     def draw(self):
-        for i in range(10):
-            line_width = 4 if i % 3 == 0 else 1
-            pygame.draw.line(self.screen, pygame.Color('black'), (0, i * 50), (self.width, i * 50), line_width)
-            pygame.draw.line(self.screen, pygame.Color('black'), (i * 50, 0), (i * 50, self.height), line_width)
-
-        for row in self.cells:
-            for cell in row:
-                cell.draw()
+        self.screen.fill(BG_COLOR)
+        for i in range(1, BOARD_ROWS):
+            thickness = LINE_WIDTH
+            if i % 3 == 0:
+                thickness = LINE_WIDTH * 3  # Make every third line thicker
+            pygame.draw.line(
+                self.screen,
+                LINE_COLOR,
+                (0, i * SQUARE_SIZE),
+                (WIDTH, i * SQUARE_SIZE),
+                thickness
+            )
+        for i in range(1, BOARD_COLS):
+            thickness = LINE_WIDTH
+            if i % 3 == 0:
+                thickness = LINE_WIDTH * 3  # Make every third line thicker
+            pygame.draw.line(
+                self.screen,
+                LINE_COLOR,
+                (i * SQUARE_SIZE, 0),
+                (i * SQUARE_SIZE, HEIGHT),
+                thickness
+            )
+        self.update_board()
 
     def select(self, row, col):
-        if self.selected_cell:
-            self.selected_cell.selected = False
-        self.selected_cell = self.cells[row][col]
-        self.selected_cell.selected = True
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            (x, y) = pygame.mouse.get_pos()
+            return x, y
+
+        pass
 
     def click(self, x, y):
-        if 0 <= x < self.width and 0 <= y < self.height:
-            col = x // 50
-            row = y // 50
-            return (row, col)
-        return None
+        col = x // SQUARE_SIZE
+        row = y // SQUARE_SIZE
+        if self.selected == (row, col):
+            # If already selected, deselect
+            self.selected = None
+        else:
+            # Otherwise, select the cell
+            self.selected = (row, col)
+        self.update_board()
+        pass
 
     def clear(self):
         if self.selected_cell and self.selected_cell.value == 0:
@@ -60,9 +82,16 @@ class Board:
         return True
 
     def update_board(self):
-        for i in range(9):
-            for j in range(9):
-                self.cells[i][j].value = self.board[i][j]
+        for row in range(9):
+            for col in range(9):
+                number = self.board[row][col]
+                if number != 0:
+                    font = pygame.font.Font(None, 36)
+                    text = font.render(str(number), True, BLACK)
+                    text_rect = text.get_rect(center=(col * SQUARE_SIZE + SQUARE_SIZE / 2,
+                                                       row * SQUARE_SIZE + SQUARE_SIZE / 2))
+                    self.screen.blit(text, text_rect)
+        pygame.display.update()
 
     def find_empty(self):
         for i in range(len(self.board)):
@@ -71,19 +100,6 @@ class Board:
                     return (i, j)
 
     def check_board(self):
-        for i in range(9):
-            row_vals = [cell.value for cell in self.cells[i] if cell.value != 0]
-            col_vals = [self.cells[r][i].value for r in range(9) if self.cells[r][i].value != 0]
-            if len(set(row_vals)) != len(row_vals) or len(set(col_vals)) != len(col_vals):
-                return False
-
-        for box_start_row in range(0, 9, 3):
-            for box_start_col in range(0, 9, 3):
-                box_vals = [self.cells[row][col].value for row in range(box_start_row, box_start_row + 3)
-                            for col in range(box_start_col, box_start_col + 3) if self.cells[row][col].value != 0]
-                if len(set(box_vals)) != len(box_vals):
-                    return False
-
-        return True
+        pass
 
 
