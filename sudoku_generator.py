@@ -53,7 +53,7 @@ class SudokuGenerator:
         for i in range(row_start, row_start + 3):
             for j in range(col_start, col_start + 3):
                 self.board[i][j] = box[count]
-            count += 1
+            count += 1 #fixed
 
     def fill_diagonal(self):
         for i in range(0, self.row_length, 3):
