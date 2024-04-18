@@ -1,6 +1,6 @@
 import math,random
 import pygame, sys
-from constants import *
+from costants import *
 from board import *
 
 class SudokuGenerator:
