@@ -134,6 +134,13 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_box(self, row_start, col_start):
+        box = [[], [], [], [], [], [], [], [], []]
+        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        for i in range(row_start, row_start+3):
+            for j in range(col_start, col_start+3):
+                random.shuffle(numbers)
+                box[j] = numbers[:]
+
         pass
     
     '''
@@ -145,18 +152,13 @@ class SudokuGenerator:
     '''
 
     def fill_diagonal(self):
-        # Initialize the 3x3 diagonal blocks
         dia = [[], [], []]
-        # Each block needs numbers 1 through 9
         numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
         for j in range(3):
-            # Shuffle the numbers for each block to ensure uniqueness
             random.shuffle(numbers)
-            # Copy the shuffled list into the current diagonal block
             dia[j] = numbers[:]
 
-        # Print each block to show the result
         for i in dia:
             print(i)
 
