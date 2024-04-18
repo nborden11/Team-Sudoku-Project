@@ -91,14 +91,13 @@ class SudokuGenerator:
     def remove_cells(self):
         v1 = 1
         v2 = 1
-        for i in range(self.board.difficulty): #self.board.difficulty might need to change
+        for i in range(self.board.difficulty):
             while True:
                 v1 = random.randint(0, 8)
                 v2 = random.randint(0, 8)
                 if self.board[v1][v2] != 0:
                     break
             self.board[v1][v2] = 0
-                    #change
         pass
 
     def generate_sudoku(size, removed):
@@ -108,7 +107,7 @@ class SudokuGenerator:
         return generator.get_board()
 
 
-        pygame.init()
-        screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        pygame.display.set_caption("Sudoku")
+        #pygame.init()
+        #screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        #pygame.display.set_caption("Sudoku")
 
