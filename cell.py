@@ -1,7 +1,3 @@
-from costants import *
-import pygame
-from board import *
-from sudoku_generator import *
 
 class Cell:
     def __init__(self, value, row, col, screen):

@@ -1,8 +1,5 @@
 import math,random
-import pygame, sys
-from costants import *
-from board import *
-from cell import *
+import pygame
 
 class SudokuGenerator:
     def __init__(self, row_length, removed_cells):
@@ -108,5 +105,25 @@ class SudokuGenerator:
         generator.remove_cells()
         return generator.get_board()
 
+pygame.init()
+WIDTH, HEIGHT = 450, 450
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Sudoku")
 
+# Create Sudoku board and generator
+generator = SudokuGenerator(9, 20)
+generator.fill_values()
+board = Board(WIDTH, HEIGHT, screen, "easy")
+board.update_cells(generator.get_board())  # Ensure this method is implemented to transfer generated board to cells
 
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    screen.fill((255, 255, 255))
+    board.draw()
+    pygame.display.flip()
+
+pygame.quit()
