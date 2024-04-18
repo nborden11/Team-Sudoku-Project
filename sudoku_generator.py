@@ -24,7 +24,7 @@ class SudokuGenerator:
 	Return:
 	None
     '''
-    def __init__(self, row_length, removed_cells):
+    def __init__(self, removed_cells, row_length = 9):
         self.row_length = row_length
         self.removed_cells = removed_cells
         self.board = []
@@ -40,6 +40,7 @@ class SudokuGenerator:
     def get_board(self):
         self.board = [["-" for i in range(9)] for j in range(9)]
         return self.board
+
 
     '''
 	Displays the board to the console
@@ -66,7 +67,11 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_row(self, row, num):
-
+        for i in range(row):
+            if self.board[row][i] == num:
+                return False
+        else:
+            return True
         pass
 
     '''
@@ -80,6 +85,11 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_col(self, col, num):
+        for i in range(col):
+            if self.board[i][col] == num:
+                return True
+        else:
+            return False
         pass
 
     '''
@@ -95,6 +105,12 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_box(self, row_start, col_start, num):
+        for i in range(row_start, row_start+2):
+            for j in range(col_start, col_start+2):
+                if self.board[i][j] == num:
+                    return False
+        else:
+            return True
         pass
     
     '''
@@ -108,6 +124,10 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def is_valid(self, row, col, num):
+        if SudokuGenerator.valid_in_row(row, num) is True:
+            if SudokuGenerator.valid_in_col(col, num) is True:
+                if SudokuGenerator.valid_in_box(row_start, col_start, num) is True:
+                    return "Valid"
         pass
 
     '''
@@ -230,7 +250,7 @@ removed is the number of cells to clear (set to 0)
 
 Return: list[list] (a 2D Python list to represent the board)
 '''
-def generate_sudoku(size, removed):
+def generate_sudoku (size, removed):
     sudoku = SudokuGenerator(size, removed)
     sudoku.fill_values()
     board = sudoku.get_board()
@@ -239,7 +259,5 @@ def generate_sudoku(size, removed):
     return board
 
 
-pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Sudoku")
+
 
