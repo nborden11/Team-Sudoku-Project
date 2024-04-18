@@ -5,6 +5,8 @@ class Cell:
         self.column = col
         self.screen = screen
 
+    def set_value(self, value):
+
     def set_cell_value(self, value):
         value = self.value
 
