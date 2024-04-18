@@ -3,11 +3,12 @@ import pygame, sys
 from costants import *
 from board import *
 
+
 class SudokuGenerator:
     def __init__(self, row_length, removed_cells):
         self.row_length = row_length
         self.removed_cells = removed_cells
-        self.board = []
+        self.board = [[0 for _ in range(row_length)] for _ in range(row_length)]
         self.box_length = math.sqrt(row_length)
         return None
 
@@ -109,7 +110,4 @@ class SudokuGenerator:
         return generator.get_board()
 
 
-        #pygame.init()
-        #screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        #pygame.display.set_caption("Sudoku")
 
