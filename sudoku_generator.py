@@ -49,9 +49,11 @@ class SudokuGenerator:
     def fill_box(self, row_start, col_start):
         box = list(range(1, self.row_length + 1))
         random.shuffle(box)
-        for i in range(row_start, row_start+3):
-            for j in range(col_start, col_start+3):
-                self.board[row_start + i][col_start + j] = box.pop()
+        count = 0
+        for i in range(row_start, row_start + 3):
+            for j in range(col_start, col_start + 3):
+                self.board[i][j] = box[count]
+                count += 1
 
     def fill_diagonal(self):
         for i in range(0, self.row_length, 3):
