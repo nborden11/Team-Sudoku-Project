@@ -1,6 +1,7 @@
+from sudoku_generator import SudokuGenerator
+from cell import Cell
 from constants import *
 import pygame
-from sudoku_generator import *
 
 class Board:
     def __init__(self, width, height, screen, difficulty):
@@ -8,71 +9,62 @@ class Board:
         self.height = height
         self.screen = screen
         self.difficulty = difficulty
-        self.board = SudokuGenerator.generate_sudoku(9, 0)
-
+        removed_cells = {'easy': 30, 'medium': 40, 'hard': 50}[difficulty]
+        self.generator = SudokuGenerator(9, removed_cells)
+        self.generator.fill_values()
+        self.generator.remove_cells()
+        self.cells = [[Cell(self.generator.board[i][j], i, j, screen) for j in range(9)] for i in range(9)]
+        self.selected = None
 
     def draw(self):
         self.screen.fill(BG_COLOR)
-        for i in range(1, BOARD_ROWS):
-            thickness = LINE_WIDTH
-            if i % 3 == 0:
-                thickness = LINE_WIDTH * 3  # Make every third line thicker
-            pygame.draw.line(
-                self.screen,
-                LINE_COLOR,
-                (0, i * SQUARE_SIZE),
-                (WIDTH, i * SQUARE_SIZE),
-                thickness
-            )
-        for i in range(1, BOARD_COLS):
-            thickness = LINE_WIDTH
-            if i % 3 == 0:
-                thickness = LINE_WIDTH * 3  # Make every third line thicker
-            pygame.draw.line(
-                self.screen,
-                LINE_COLOR,
-                (i * SQUARE_SIZE, 0),
-                (i * SQUARE_SIZE, HEIGHT),
-                thickness
-            )
-        self.update_board()
+
+        for row in self.cells:
+            for cell in row:
+                cell.draw()
+
+        # Draw grid lines
+        for i in range(1, BOARD_ROWS+1):
+            thickness = LINE_WIDTH * 3 if i % 3 == 0 else LINE_WIDTH
+            pygame.draw.line(self.screen, LINE_COLOR, (0, i * SQUARE_SIZE), (WIDTH, i * SQUARE_SIZE), thickness)
+            pygame.draw.line(self.screen, LINE_COLOR, (i * SQUARE_SIZE, 0), (i * SQUARE_SIZE, HEIGHT), thickness)
+
+        pygame.display.update()
 
     def select(self, row, col):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            (x, y) = pygame.mouse.get_pos()
-            return x, y
-
-        pass
+        if self.selected:
+            self.selected.selected = False
+        self.selected = self.cells[row][col]
+        self.selected.selected = True
 
     def click(self, x, y):
-        col = x // SQUARE_SIZE
-        row = y // SQUARE_SIZE
-        if self.selected == (row, col):
-            # If already selected, deselect
-            self.selected = None
-        else:
-            # Otherwise, select the cell
-            self.selected = (row, col)
-        self.update_board()
-        pass
+        col = int(x // SQUARE_SIZE)
+        row = int(y // SQUARE_SIZE)
+        if 0 <= col < 9 and 0 <= row < 9:
+            self.select(row, col)
 
     def clear(self):
         if self.selected_cell and self.selected_cell.value == 0:
             self.selected_cell.set_cell_value(0)
             self.selected_cell.set_sketched_value(0)
+            self.selected.draw()
 
     def sketch(self, value):
-        if self.selected_cell and self.selected_cell.value == 0:
-            self.selected_cell.set_sketched_value(value)
+        if self.selected and self.selected.value == 0:
+            self.selected.set_sketched_value(value)
+            self.selected.draw()
 
     def place_number(self, value):
-        if self.selected_cell and self.selected_cell.value == 0:
-            self.selected_cell.set_cell_value(value)
+        if self.selected and self.selected.value == 0:
+            self.selected.set_cell_value(value)
+            self.selected.draw()
 
     def reset_to_original(self):
         for row in self.cells:
             for cell in row:
-                cell.set_cell_value(0)
+                if cell.value == 0:
+                    cell.set_cell_value(0)
+                cell.draw()
 
     def is_full(self):
         for row in self.cells:
@@ -84,16 +76,16 @@ class Board:
     def update_board(self):
         for row in range(9):
             for col in range(9):
-                number = self.board[row][col]
-                if number != 0:
-                    font = pygame.font.Font(None, 36)
-                    text = font.render(str(number), True, BLACK)
-                    text_rect = text.get_rect(center=(col * SQUARE_SIZE + SQUARE_SIZE / 2,
-                                                       row * SQUARE_SIZE + SQUARE_SIZE / 2))
-                    self.screen.blit(text, text_rect)
-        pygame.display.update()
+                self.cells[row][col].set_cell_value(self.generator.board[row][col])
+                self.cells[row][col].draw()
 
     def check_board(self):
-        pass
+        return all(self.generator.is_valid(row, col, self.cells[row][col].value)
+                   for row in range(9) for col in range(9) if self.cells[row][col].value != 0)
 
+    def select(self, row, col):
+        if self.selected:
+            self.selected.selected = False
+        self.selected = self.cells[row][col]
+        self.selected.selected = True
 
