@@ -15,6 +15,7 @@ def main():
 
     # Font
     font = pygame.font.Font(None, 36)
+    welcome_font = pygame.font.Font(None, 48)  # Larger font for titles
 
     # Game states
     game_over = False
@@ -22,6 +23,9 @@ def main():
     difficulty = 'easy'  # Default difficulty
 
     board = None
+
+    welcome_text = welcome_font.render('Welcome to Sudoku!', True, BLACK)
+    mode_text = font.render('Select Game Mode', True, BLACK)
 
     # Game loop
     while True:
@@ -61,12 +65,14 @@ def main():
         screen.fill(BG_COLOR)
         if not game_started:
             # Draw start screen with buttons
-            easy_button = pygame.draw.rect(screen, LIGHT_GRAY, (50, 150, 200, 50))
-            medium_button = pygame.draw.rect(screen, LIGHT_GRAY, (50, 250, 200, 50))
-            hard_button = pygame.draw.rect(screen, LIGHT_GRAY, (50, 350, 200, 50))
-            screen.blit(font.render('Easy', True, BLACK), (100, 160))
-            screen.blit(font.render('Medium', True, BLACK), (85, 260))
-            screen.blit(font.render('Hard', True, BLACK), (100, 360))
+            easy_button = pygame.draw.rect(screen, LIGHT_GRAY, (200, 250, 200, 50))
+            medium_button = pygame.draw.rect(screen, LIGHT_GRAY, (200, 320, 200, 50))
+            hard_button = pygame.draw.rect(screen, LIGHT_GRAY, (200, 390, 200, 50))
+            screen.blit(welcome_text, (WIDTH / 2 - welcome_text.get_width() / 2, 50))
+            screen.blit(mode_text, (WIDTH / 2 - mode_text.get_width() / 2, 150))
+            screen.blit(font.render('Easy', True, BLACK), (250, 260))
+            screen.blit(font.render('Medium', True, BLACK), (250, 330))
+            screen.blit(font.render('Hard', True, BLACK), (250, 400))
         else:
             # Game board
             if board:
