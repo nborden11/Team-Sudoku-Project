@@ -1,4 +1,4 @@
-from costants import *
+from constants import *
 import pygame
 from sudoku_generator import *
 
@@ -8,7 +8,7 @@ class Board:
         self.height = height
         self.screen = screen
         self.difficulty = difficulty
-        self.board = sudoku_generator(9, 0)
+        self.board = SudokuGenerator.generate_sudoku(9, 0)
 
 
     def draw(self):
