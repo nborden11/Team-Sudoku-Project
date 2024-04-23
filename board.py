@@ -83,9 +83,4 @@ class Board:
         return all(self.generator.is_valid(row, col, self.cells[row][col].value)
                    for row in range(9) for col in range(9) if self.cells[row][col].value != 0)
 
-    def select(self, row, col):
-        if self.selected:
-            self.selected.selected = False
-        self.selected = self.cells[row][col]
-        self.selected.selected = True
 
