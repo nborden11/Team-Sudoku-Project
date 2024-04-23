@@ -79,7 +79,7 @@ class Board:
                 self.cells[row][col].draw()
 
     def check_board(self):
-        return all(self.generator.is_valid(row, col, self.cells[row][col].value)
-                   for row in range(9) for col in range(9) if self.cells[row][col].value != 0)
+        return all(cell.confirmed and self.generator.is_valid(cell.row, cell.col, cell.value)
+                   for row in self.cells for cell in row)
 
 

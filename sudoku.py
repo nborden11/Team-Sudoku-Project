@@ -144,11 +144,13 @@ def main():
                 text = font.render('Game Won!', True, BLACK)
                 screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
                 draw_buttons(screen, None, None, exit_button)  # Only show exit button
+                pygame.display.update()
             else:
                 screen.fill(BG_COLOR)
                 text = font.render('Game Over :(', True, BLACK)
                 screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
                 draw_buttons(screen, None, restart_button, None)
+                pygame.display.update()
 
         # Drawing the screen only when necessary
         if not game_started:
