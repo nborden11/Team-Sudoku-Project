@@ -10,10 +10,18 @@ class Cell:
         self.font = pygame.font.Font(None, 40)
         self.cell_size = 66.6
         self.sketched_value = 0
+        self.confirmed = False  # Attribute to check if the value is confirmed
 
 
-    def set_value(self, value):
-        self.value = value
+
+    def set_value(self, value, confirmed = False):
+        if confirmed:
+            self.value = value
+            self.sketched_value = 0
+            self.confirmed = True
+        else:
+            self.sketched_value = value
+            self.confirmed = False
 
     def set_cell_value(self, value):
         self.value = value
@@ -28,12 +36,10 @@ class Cell:
 
         if self.value != 0:
             text = self.font.render(str(self.value), True, pygame.Color('black'))
-            text_rect = text.get_rect(center=(x + self.cell_size / 2, y + self.cell_size / 2))
-            self.screen.blit(text, text_rect)
+            self.screen.blit(text, (x + self.cell_size / 2, y + self.cell_size / 2))
         elif self.sketched_value != 0:
-            text = self.font.render(str(self.sketched_value), True, pygame.Color('gray'))
-            text_rect = text.get_rect(center=(x + self.cell_size / 2, y + self.cell_size / 2))
-            self.screen.blit(text, text_rect)
+            text = self.font.render(str(self.sketched_value), True, pygame.Color('red'))
+            self.screen.blit(text, (x + self.cell_size / 2, y + self.cell_size / 2))
 
         if self.selected:
             pygame.draw.rect(self.screen, pygame.Color('red'), (x, y, self.cell_size, self.cell_size), 4)

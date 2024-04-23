@@ -119,14 +119,17 @@ def main():
 
             # Handle key input for numbers
             if event.type == pygame.KEYDOWN and game_started:
-                if board and board.selected:  # Check if a cell is selected
+                if board and board.selected:
                     if event.unicode.isdigit():
                         num = int(event.unicode)
                         if 1 <= num <= 9:
-                            board.place_number(num)
+                            board.sketch(num)  # Sketch the number in red
+                    elif event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
+                        if board.selected and board.selected.sketched_value != 0:
+                            board.place_number(board.selected.sketched_value)  # Confirm the number
                     elif event.key == pygame.K_DELETE or event.key == pygame.K_BACKSPACE:
-                        if board.selected:
-                            board.clear()
+                        if board.selected and not board.selected.confirmed:
+                            board.clear()  # Clear only if the number is not confirmed
 
         # Check if the board is full
         if board and board.is_full():

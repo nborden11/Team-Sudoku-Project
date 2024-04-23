@@ -44,19 +44,18 @@ class Board:
             self.select(row, col)
 
     def clear(self):
-        if self.selected_cell and self.selected_cell.value == 0:
-            self.selected_cell.set_cell_value(0)
-            self.selected_cell.set_sketched_value(0)
+        if self.selected and not self.selected.confirmed:
+            self.selected.set_value(0)
             self.selected.draw()
 
     def sketch(self, value):
-        if self.selected and self.selected.value == 0:
-            self.selected.set_sketched_value(value)
+        if self.selected and not self.selected.confirmed:
+            self.selected.set_value(value, confirmed=False)
             self.selected.draw()
 
     def place_number(self, value):
-        if self.selected and self.selected.value == 0:
-            self.selected.set_cell_value(value)
+        if self.selected and not self.selected.confirmed:
+            self.selected.set_value(value, confirmed=True)
             self.selected.draw()
 
     def reset_to_original(self):
