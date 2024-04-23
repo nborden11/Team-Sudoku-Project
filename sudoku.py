@@ -152,7 +152,7 @@ def main():
                 draw_buttons(screen, None, restart_button, None)
                 pygame.display.update()
 
-        # Drawing the screen only when necessary
+                # Drawing the screen only when necessary
         if not game_started:
             easy_button, medium_button, hard_button = draw_start_screen(screen, welcome_text, mode_text)
         elif game_started and board:
