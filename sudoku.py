@@ -3,6 +3,7 @@ import sys
 from board import Board
 from constants import *
 
+
 def main():
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT+100))
@@ -12,6 +13,40 @@ def main():
     BLACK = (0, 0, 0)
     WHITE = (255, 255, 255)
     LIGHT_GRAY = (200, 200, 200)
+
+    def draw_buttons(screen, reset_button, restart_button, exit_button):
+        # Button properties
+        button_color = LIGHT_GRAY
+        text_color = BLACK
+        button_text_y_offset = 10
+
+        if reset_button:
+            pygame.draw.rect(screen, button_color, reset_button)
+            screen.blit(font.render('Reset', True, text_color),
+                        (reset_button.x + 45, reset_button.y + button_text_y_offset))
+        if restart_button:
+            pygame.draw.rect(screen, button_color, restart_button)
+            screen.blit(font.render('Restart', True, text_color),
+                        (restart_button.x + 35, restart_button.y + button_text_y_offset))
+        if exit_button:
+            pygame.draw.rect(screen, button_color, exit_button)
+            screen.blit(font.render('Exit', True, text_color),
+                        (exit_button.x + 50, exit_button.y + button_text_y_offset))
+
+    def draw_start_screen(screen, welcome_text, mode_text):
+        screen.fill(BG_COLOR)
+        easy_button = pygame.draw.rect(screen, LIGHT_GRAY, (200, 250, 200, 50))
+        medium_button = pygame.draw.rect(screen, LIGHT_GRAY, (200, 320, 200, 50))
+        hard_button = pygame.draw.rect(screen, LIGHT_GRAY, (200, 390, 200, 50))
+
+        screen.blit(welcome_text, (WIDTH // 2 - welcome_text.get_width() // 2, 50))
+        screen.blit(mode_text, (WIDTH // 2 - mode_text.get_width() // 2, 150))
+
+        screen.blit(font.render('Easy', True, BLACK), (250, 260))
+        screen.blit(font.render('Medium', True, BLACK), (250, 330))
+        screen.blit(font.render('Hard', True, BLACK), (250, 400))
+
+        return easy_button, medium_button, hard_button  # Return button rects for click detection
 
     # Font
     font = pygame.font.Font(None, 36)
@@ -50,18 +85,10 @@ def main():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = event.pos
-                if game_started:
-                    if board:
-                        clicked = board.click(x, y)
-                        if clicked:
-                            row, col = clicked
-                            board.select(row, col)
-
-                # Check button presses
-                if reset_button.collidepoint(x, y):
+                if reset_button.collidepoint(x, y) and game_started:
                     if board:
                         board.reset_to_original()
-                elif restart_button.collidepoint(x, y):
+                elif restart_button.collidepoint(x, y) and game_started:
                     board = Board(WIDTH, HEIGHT, screen, difficulty)
                 elif exit_button.collidepoint(x, y):
                     pygame.quit()
@@ -97,32 +124,32 @@ def main():
                         num = int(event.unicode)
                         if 1 <= num <= 9:
                             board.place_number(num)
+                    elif event.key == pygame.K_DELETE or event.key == pygame.K_BACKSPACE:
+                        if board.selected:
+                            board.clear()
 
-        # Drawing the screen
-        screen.fill(BG_COLOR)
+        # Check if the board is full
+        if board and board.is_full():
+            if board.check_board():
+                screen.fill(BG_COLOR)
+                text = font.render('Game Won!', True, BLACK)
+                screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
+                draw_buttons(screen, None, None, exit_button)  # Only show exit button
+            else:
+                screen.fill(BG_COLOR)
+                text = font.render('Game Over :(', True, BLACK)
+                screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
+                draw_buttons(screen, None, restart_button, None)
+
+        # Drawing the screen only when necessary
         if not game_started:
-            # Draw start screen with buttons
-            easy_button = pygame.draw.rect(screen, LIGHT_GRAY, (200, 250, 200, 50))
-            medium_button = pygame.draw.rect(screen, LIGHT_GRAY, (200, 320, 200, 50))
-            hard_button = pygame.draw.rect(screen, LIGHT_GRAY, (200, 390, 200, 50))
-            screen.blit(welcome_text, (WIDTH / 2 - welcome_text.get_width() / 2, 50))
-            screen.blit(mode_text, (WIDTH / 2 - mode_text.get_width() / 2, 150))
-            screen.blit(font.render('Easy', True, BLACK), (250, 260))
-            screen.blit(font.render('Medium', True, BLACK), (250, 330))
-            screen.blit(font.render('Hard', True, BLACK), (250, 400))
-        else:
-            # Game board
-            if board:
-                board.draw()
-        # Redraw buttons manually here
-        reset_button = pygame.draw.rect(screen, LIGHT_GRAY, (50, bottom_panel_y, 150, button_height))
-        restart_button = pygame.draw.rect(screen, LIGHT_GRAY, (225, bottom_panel_y, 150, button_height))
-        exit_button = pygame.draw.rect(screen, LIGHT_GRAY, (400, bottom_panel_y, 150, button_height))
-        screen.blit(font.render('Reset', True, BLACK), (reset_button.x + 45, reset_button.y + 10))
-        screen.blit(font.render('Restart', True, BLACK), (restart_button.x + 35, restart_button.y + 10))
-        screen.blit(font.render('Exit', True, BLACK), (exit_button.x + 50, exit_button.y + 10))
+            easy_button, medium_button, hard_button = draw_start_screen(screen, welcome_text, mode_text)
+        elif game_started and board:
+            board.draw()
+            draw_buttons(screen, reset_button, restart_button, exit_button)
 
-        pygame.display.flip()
+        pygame.display.update()
+
 
 if __name__ == "__main__":
     main()
