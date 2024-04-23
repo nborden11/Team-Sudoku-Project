@@ -5,7 +5,7 @@ from constants import *
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT+100))
     pygame.display.set_caption('Sudoku Game')
 
     # Colors
@@ -21,8 +21,22 @@ def main():
     game_over = False
     game_started = False
     difficulty = 'easy'  # Default difficulty
-
     board = None
+
+    # Buttons
+    button_height = 40
+    button_width = 150
+    space_between = 10
+    button_spacing = 10  # Space between buttons
+    button_start_x = 50  # Horizontal start position for the first button
+    bottom_panel_y = HEIGHT + 100 - button_height - 20  # Position buttons at the bottom
+
+    # Define button rectangles
+    reset_button = pygame.Rect(button_start_x, bottom_panel_y, button_width, button_height)
+    restart_button = pygame.Rect(button_start_x + button_width + button_spacing, bottom_panel_y, button_width,
+                                 button_height)
+    exit_button = pygame.Rect(button_start_x + 2 * (button_width + button_spacing), bottom_panel_y, button_width,
+                              button_height)
 
     welcome_text = welcome_font.render('Welcome to Sudoku!', True, BLACK)
     mode_text = font.render('Select Game Mode', True, BLACK)
@@ -36,8 +50,25 @@ def main():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = event.pos
+                if game_started:
+                    if board:
+                        clicked = board.click(x, y)
+                        if clicked:
+                            row, col = clicked
+                            board.select(row, col)
+
+                # Check button presses
+                if reset_button.collidepoint(x, y):
+                    if board:
+                        board.reset_to_original()
+                elif restart_button.collidepoint(x, y):
+                    board = Board(WIDTH, HEIGHT, screen, difficulty)
+                elif exit_button.collidepoint(x, y):
+                    pygame.quit()
+                    sys.exit()
+
+                # Start screen logic
                 if not game_started:
-                    # Check button positions for difficulty selection
                     if easy_button.collidepoint(x, y):
                         difficulty = 'easy'
                         game_started = True
@@ -47,10 +78,7 @@ def main():
                     elif hard_button.collidepoint(x, y):
                         difficulty = 'hard'
                         game_started = True
-
                     if game_started:
-                        # Create the board with selected difficulty
-                        removed_cells = 30 if difficulty == 'easy' else 40 if difficulty == 'medium' else 50
                         board = Board(WIDTH, HEIGHT, screen, difficulty)
 
                 else:
@@ -60,6 +88,15 @@ def main():
                         if clicked:
                             row, col = clicked
                             board.select(row, col)
+
+
+            # Handle key input for numbers
+            if event.type == pygame.KEYDOWN and game_started:
+                if board and board.selected:  # Check if a cell is selected
+                    if event.unicode.isdigit():
+                        num = int(event.unicode)
+                        if 1 <= num <= 9:
+                            board.place_number(num)
 
         # Drawing the screen
         screen.fill(BG_COLOR)
@@ -77,6 +114,13 @@ def main():
             # Game board
             if board:
                 board.draw()
+        # Redraw buttons manually here
+        reset_button = pygame.draw.rect(screen, LIGHT_GRAY, (50, bottom_panel_y, 150, button_height))
+        restart_button = pygame.draw.rect(screen, LIGHT_GRAY, (225, bottom_panel_y, 150, button_height))
+        exit_button = pygame.draw.rect(screen, LIGHT_GRAY, (400, bottom_panel_y, 150, button_height))
+        screen.blit(font.render('Reset', True, BLACK), (reset_button.x + 45, reset_button.y + 10))
+        screen.blit(font.render('Restart', True, BLACK), (restart_button.x + 35, restart_button.y + 10))
+        screen.blit(font.render('Exit', True, BLACK), (exit_button.x + 50, exit_button.y + 10))
 
         pygame.display.flip()
 
