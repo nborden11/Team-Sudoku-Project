@@ -46,24 +46,24 @@ def main():
         screen.blit(font.render('Medium', True, BLACK), (250, 330))
         screen.blit(font.render('Hard', True, BLACK), (250, 400))
 
-        return easy_button, medium_button, hard_button  # Return button rects for click detection
+        return easy_button, medium_button, hard_button
 
     # Font
     font = pygame.font.Font(None, 36)
-    welcome_font = pygame.font.Font(None, 48)  # Larger font for titles
+    welcome_font = pygame.font.Font(None, 48)
 
     # Game states
     game_over = False
     game_started = False
-    difficulty = 'easy'  # Default difficulty
+    difficulty = 'easy'
     board = None
 
     # Buttons
     button_height = 40
     button_width = 150
     space_between = 10
-    button_spacing = 10  # Space between buttons
-    button_start_x = 50  # Horizontal start position for the first button
+    button_spacing = 10
+    button_start_x = 50
     bottom_panel_y = HEIGHT + 100 - button_height - 20  # Position buttons at the bottom
 
     # Define button rectangles
@@ -152,7 +152,7 @@ def main():
                 draw_buttons(screen, None, restart_button, None)
                 pygame.display.update()
 
-                # Drawing the screen only when necessary
+        # Drawing the screen only when necessary
         if not game_started:
             easy_button, medium_button, hard_button = draw_start_screen(screen, welcome_text, mode_text)
         elif game_started and board:

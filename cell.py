@@ -39,7 +39,7 @@ class Cell:
             self.screen.blit(text, (x + self.cell_size / 2, y + self.cell_size / 2))
         elif self.sketched_value != 0:
             text = self.font.render(str(self.sketched_value), True, pygame.Color('red'))
-            self.screen.blit(text, (x + 10, y + 10))  # Adjust the offset as needed for best appearance
+            self.screen.blit(text, (x + 10, y + 10))
 
         if self.selected:
             pygame.draw.rect(self.screen, pygame.Color('red'), (x, y, self.cell_size, self.cell_size), 4)
