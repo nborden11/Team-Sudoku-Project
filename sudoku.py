@@ -83,11 +83,17 @@ def main():
                 pygame.quit()
                 sys.exit()
 
+            #reset_button, restart_button, and exit_button logic
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = event.pos
                 if reset_button.collidepoint(x, y) and game_started:
                     if board:
-                        board.reset_to_original()
+                        # Iterate through all cells and reset sketches directly
+                        for row in board.cells:
+                            for cell in row:
+                                if not cell.confirmed:  # Check if the cell is not confirmed
+                                    cell.set_value(0, confirmed=False)
+                                    cell.draw()
                 elif restart_button.collidepoint(x, y) and game_started:
                     board = Board(WIDTH, HEIGHT, screen, difficulty)
                 elif exit_button.collidepoint(x, y):
