@@ -37,6 +37,7 @@ class Board:
             self.selected.selected = False
         self.selected = self.cells[row][col]
         self.selected.selected = True
+        self.draw()
 
     def click(self, x, y):
         col = int(x // SQUARE_SIZE)
