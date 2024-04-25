@@ -10,7 +10,7 @@ class Cell:
         self.font = pygame.font.Font(None, 40)
         self.cell_size = 66.6
         self.sketched_value = 0
-        self.confirmed = False  # Attribute to check if the value is confirmed
+        self.confirmed = False
 
 
 

@@ -2,7 +2,6 @@ from sudoku_generator import SudokuGenerator
 from cell import Cell
 from constants import *
 import pygame
-#Hope this works111
 
 class Board:
     def __init__(self, width, height, screen, difficulty):
@@ -10,15 +9,16 @@ class Board:
         self.height = height
         self.screen = screen
         self.difficulty = difficulty
-        removed_cells = {'easy': 30, 'medium': 40, 'hard': 50}[difficulty]
+        removed_cells = {'easy': 1, 'medium': 40, 'hard': 50}[difficulty]
         self.generator = SudokuGenerator(9, removed_cells)
         self.generator.fill_values()
         self.generator.remove_cells()
         self.cells = [[Cell(self.generator.board[i][j], i, j, screen) for j in range(9)] for i in range(9)]
+        self.original = [rows[:] for rows in self.cells]
         self.selected = None
 
     def draw(self):
-        self.screen.fill(BG_COLOR)
+        self.screen.fill(BG_COLOR,(0,0,600,HEIGHT + 100 - 40 - 20))
 
         for row in self.cells:
             for cell in row:
@@ -61,7 +61,7 @@ class Board:
             self.selected.draw()
 
     def reset_to_original(self):
-        for row in self.cells:
+        for row in self.original:
             for cell in row:
                 if cell.value == 0:
                     cell.set_cell_value(0)
@@ -81,7 +81,11 @@ class Board:
                 self.cells[row][col].draw()
 
     def check_board(self):
-        return all(cell.confirmed and self.generator.is_valid(cell.row, cell.col, cell.value)
-                   for row in self.cells for cell in row)
+        for row_index, row in enumerate(self.cells):
+            for col_index, cell in enumerate(row):
+                if cell.confirmed:
+                    if not self.generator.is_valid(cell.row, cell.column, cell.value):
+                        return False
+        return True
 
 
