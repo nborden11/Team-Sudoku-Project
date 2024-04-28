@@ -9,7 +9,7 @@ class Board:
         self.height = height
         self.screen = screen
         self.difficulty = difficulty
-        removed_cells = {'easy': 1, 'medium': 40, 'hard': 50}[difficulty]
+        removed_cells = {'easy': 30, 'medium': 40, 'hard': 50}[difficulty]
         self.generator = SudokuGenerator(9, removed_cells)
         self.generator.fill_values()
         self.generator.remove_cells()
